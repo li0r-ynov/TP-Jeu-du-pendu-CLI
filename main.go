@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
+	if len(os.Args) < 2 || os.Args[1] != "jouer" {
+		fmt.Println("Utilisation : go run . jouer")
+		return
+	}
+
 	nom := demanderNom()
 	if nom == "" {
 		donnees := map[string]any{
@@ -35,4 +40,4 @@ if err != nil {
 	if _, err := demarrerMot(); err != nil {
 		fmt.Fprintln(os.Stderr, "Erreur :", err)
 	}
-}
+
