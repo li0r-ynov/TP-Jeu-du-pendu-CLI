@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
 	nom := demanderNom()
@@ -8,4 +11,8 @@ func main() {
 		return
 	}
 	fmt.Printf("Bonjour %s !\n", nom)
+
+	if _, err := demarrerMot(); err != nil {
+		fmt.Fprintln(os.Stderr, "Erreur :", err)
+	}
 }
