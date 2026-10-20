@@ -1,6 +1,18 @@
 {
-  "essais_restants": 6,
-  "lettres_jouées": [],
-  "mot": "",
-  "pseudo": "Lior"
+  "nom": "Michel",
+  "mot": "ordinateur",
+  "lettres_jouées": [
+    "a",
+    "t",
+    "f",
+    "h",
+    "o",
+    "r",
+    "d",
+    "i",
+    "n",
+    "e",
+    "u"
+  ],
+  "essaies_restants": 4
 }

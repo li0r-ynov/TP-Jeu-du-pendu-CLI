@@ -20,8 +20,8 @@ func demarrerMot() (string, error) {
 	scanner := bufio.NewScanner(fichier)
 	for scanner.Scan() {
 		mot := strings.TrimSpace(scanner.Text())
-		if mot != "" {
-			mots = append(mots, mot)
+		if WordIsValid(mot) {
+			mots = append(mots, strings.ToLower(mot))
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -55,4 +55,13 @@ func demarrerMot() (string, error) {
 
 	fmt.Printf("Mot à deviner : %s\n", strings.Join(masque, " "))
 	return mot, nil
+}
+
+func WordIsValid(word string) bool {
+	for _, letter := range word {
+		if !unicode.IsLetter(letter) && letter != '-' {
+			return false
+		}
+	}
+	return word != "" && !strings.HasPrefix(word, "-") && !strings.HasSuffix(word, "-") && !strings.Contains(word, "--")
 }

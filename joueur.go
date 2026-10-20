@@ -7,9 +7,7 @@ import (
 	"unicode"
 )
 
-func demanderNom() string {
-	scanner := bufio.NewScanner(os.Stdin)
-
+func demanderNom(scanner *bufio.Scanner) string {
 	for {
 		fmt.Print("Veuillez renseigner votre nom : ")
 		if !scanner.Scan() {
