@@ -34,7 +34,7 @@ func chargerPartie() (Partie, error) {
 	if err := json.Unmarshal(contenu, &partie); err != nil {
 		return Partie{}, fmt.Errorf("sauvegarde JSON invalide : %w", err)
 	}
-	// Migration des sauvegardes produites par l'ancienne version.
+
 	if partie.Nom == "" {
 		var ancienne struct {
 			Pseudo  string   `json:"pseudo"`
@@ -98,7 +98,6 @@ func ajouterHistorique(partie Partie, resultat string) error {
 	return nil
 }
 
-// afficherHistorique affiche les parties terminées enregistrées dans score.csv.
 func afficherHistorique() error {
 	fichier, err := os.Open(fichierHistorique)
 	if err != nil {

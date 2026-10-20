@@ -1,6 +1,16 @@
 {
-  "nom": "Gu",
-  "mot": "porte-monnaie",
-  "lettres_jouees": [],
-  "essaies_restants": 6
+  "nom": "Lior",
+  "mot": "fichier",
+  "lettres_jouees": [
+    "i",
+    "f",
+    "h",
+    "o",
+    "u",
+    "y",
+    "e",
+    "r",
+    "c"
+  ],
+  "essaies_restants": 3
 }
