@@ -1,18 +1,6 @@
 {
-  "nom": "Michel",
-  "mot": "ordinateur",
-  "lettres_jouées": [
-    "a",
-    "t",
-    "f",
-    "h",
-    "o",
-    "r",
-    "d",
-    "i",
-    "n",
-    "e",
-    "u"
-  ],
-  "essaies_restants": 4
+  "nom": "Gu",
+  "mot": "porte-monnaie",
+  "lettres_jouees": [],
+  "essaies_restants": 6
 }

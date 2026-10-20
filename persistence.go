@@ -4,9 +4,11 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 	"time"
+	"unicode"
 )
 
 const fichierSauvegarde = "save.json"
@@ -44,7 +46,15 @@ func chargerPartie() (Partie, error) {
 			partie = Partie{Nom: ancienne.Pseudo, MotSecret: ancienne.Mot, LettresJouees: ancienne.Lettres, EssaiesRestants: ancienne.Essais}
 		}
 	}
-	if strings.TrimSpace(partie.Nom) == "" || strings.TrimSpace(partie.MotSecret) == "" {
+	if partie.LettresJouees == nil {
+		var ancienChamp struct {
+			Lettres []string `json:"lettres_jouées"`
+		}
+		if err := json.Unmarshal(contenu, &ancienChamp); err == nil {
+			partie.LettresJouees = ancienChamp.Lettres
+		}
+	}
+	if strings.TrimSpace(partie.Nom) == "" || !WordIsValid(partie.MotSecret) {
 		return Partie{}, fmt.Errorf("aucune partie complète à reprendre dans save.json")
 	}
 	if partie.EssaiesRestants < 0 || partie.EssaiesRestants > 6 {
@@ -52,6 +62,12 @@ func chargerPartie() (Partie, error) {
 	}
 	if partie.LettresJouees == nil {
 		partie.LettresJouees = []string{}
+	}
+	for _, lettre := range partie.LettresJouees {
+		runes := []rune(lettre)
+		if len(runes) != 1 || !unicode.IsLetter(runes[0]) {
+			return Partie{}, fmt.Errorf("lettre invalide dans save.json")
+		}
 	}
 	return partie, nil
 }
@@ -80,4 +96,39 @@ func ajouterHistorique(partie Partie, resultat string) error {
 		return fmt.Errorf("finalisation de l'historique : %w", err)
 	}
 	return nil
+}
+
+// afficherHistorique affiche les parties terminées enregistrées dans score.csv.
+func afficherHistorique() error {
+	fichier, err := os.Open(fichierHistorique)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Println("Aucune partie terminée dans l'historique.")
+			return nil
+		}
+		return fmt.Errorf("lecture de %s : %w", fichierHistorique, err)
+	}
+	defer fichier.Close()
+
+	lecteur := csv.NewReader(fichier)
+	lecteur.FieldsPerRecord = -1
+	for ligne := 0; ; ligne++ {
+		record, err := lecteur.Read()
+		if err != nil {
+			if err == io.EOF {
+				if ligne == 0 {
+					fmt.Println("Aucune partie terminée dans l'historique.")
+				}
+				return nil
+			}
+			return fmt.Errorf("lecture de l'historique : %w", err)
+		}
+		if ligne == 0 {
+			continue // première ligne : noms des colonnes
+		}
+		if len(record) < 5 {
+			return fmt.Errorf("ligne %d de score.csv incomplète", ligne+1)
+		}
+		fmt.Printf("%s | %s | mot : %s | résultat : %s | essais restants : %s\n", record[0], record[1], record[2], record[3], record[4])
+	}
 }

@@ -9,10 +9,17 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 || (os.Args[1] != "jouer" && os.Args[1] != "reprendre") {
-		fmt.Println("Utilisation : go run . jouer | reprendre")
+	if len(os.Args) == 2 && os.Args[1] == "historique" {
+		if err := afficherHistorique(); err != nil {
+			fmt.Fprintln(os.Stderr, "Impossible de lire l'historique :", err)
+		}
 		return
 	}
+	if len(os.Args) != 2 || (os.Args[1] != "jouer" && os.Args[1] != "reprendre") {
+		fmt.Println("Utilisation : go run . jouer | reprendre | historique")
+		return
+	}
+
 	scanner := bufio.NewScanner(os.Stdin)
 	var partie Partie
 	if os.Args[1] == "reprendre" {
@@ -20,6 +27,14 @@ func main() {
 		partie, err = chargerPartie()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Impossible de reprendre :", err)
+			return
+		}
+		if partie.EssaiesRestants == 0 || partie.motTrouve() {
+			if partie.EssaiesRestants == 0 {
+				fmt.Printf("Cette partie est terminée. Le mot était : %s\n", partie.MotSecret)
+			} else {
+				fmt.Printf("Cette partie est déjà gagnée : %s\n", partie.MotSecret)
+			}
 			return
 		}
 		fmt.Printf("Reprise de la partie de %s.\n", partie.Nom)
@@ -33,10 +48,6 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Erreur :", err)
 			return
 		}
-	}
-	if partie.EssaiesRestants <= 0 || partie.motTrouve() {
-		fmt.Println("La partie sauvegardée est déjà terminée.")
-		return
 	}
 	if err := sauvegarderPartie(partie); err != nil {
 		fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
@@ -83,6 +94,7 @@ func jouer(scanner *bufio.Scanner, partie *Partie) error {
 			return err
 		}
 	}
+
 	resultat := "perdu"
 	if partie.motTrouve() {
 		resultat = "gagné"

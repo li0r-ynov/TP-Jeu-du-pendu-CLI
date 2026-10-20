@@ -1,11 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"os"
-	"strings"
-)
+import "fmt"
 
 type Partie struct {
 	Nom             string   `json:"nom"`
@@ -15,19 +10,10 @@ type Partie struct {
 }
 
 func (p *Partie) selectionnerMot() error {
-	data, err := os.ReadFile("mot.txt")
+	mot, err := demarrerMot()
 	if err != nil {
-		return fmt.Errorf("impossible de lire mot.txt : %w", err)
+		return fmt.Errorf("sélection du mot : %w", err)
 	}
-	var mots []string
-	for _, mot := range strings.Fields(string(data)) {
-		if WordIsValid(mot) {
-			mots = append(mots, strings.ToLower(mot))
-		}
-	}
-	if len(mots) == 0 {
-		return fmt.Errorf("mot.txt ne contient aucun mot valide")
-	}
-	p.MotSecret = mots[rand.Intn(len(mots))]
+	p.MotSecret = mot
 	return nil
 }
