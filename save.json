@@ -1,15 +1,18 @@
 {
   "nom": "Michel",
-  "mot": "clavier",
+  "mot": "ordinateur",
   "lettres_jouées": [
     "a",
-    "i",
+    "t",
+    "f",
+    "h",
     "o",
-    "l",
-    "c",
-    "v",
+    "r",
+    "d",
+    "i",
+    "n",
     "e",
-    "r"
+    "u"
   ],
-  "essaies_restants": 5
+  "essaies_restants": 4
 }
