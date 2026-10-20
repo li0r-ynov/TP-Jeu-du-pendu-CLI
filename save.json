@@ -1,18 +1,16 @@
 {
   "nom": "Michel",
-  "mot": "ordinateur",
+  "mot": "pendu",
   "lettres_jouées": [
-    "a",
-    "t",
-    "f",
-    "h",
-    "o",
-    "r",
-    "d",
     "i",
-    "n",
+    "p",
+    "o",
     "e",
-    "u"
+    "n",
+    "r",
+    "a",
+    "j",
+    "k"
   ],
-  "essaies_restants": 4
+  "essaies_restants": 0
 }
