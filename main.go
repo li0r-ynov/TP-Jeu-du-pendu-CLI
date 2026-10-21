@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	 "encoding/json"
 )
 
 func main() {
@@ -13,31 +12,15 @@ func main() {
 	}
 
 	nom := demanderNom()
-	if nom == "" {
-		donnees := map[string]any{
-	"nom": nom,
-	"mot": "",
-	"lettres_jouées": []string{},
-	"essaies_restants": 6,
-		}
+if nom == "" {
+    return
 }
 
-contenuJSON, err := json.MarshalIndent(donnees, "", "  ")
+fmt.Printf("Bienvenue %s !\n", nom)
+
+_, err := demarrerMot()
 if err != nil {
-	fmt.Println("Erreur de conversion JSON :", err)
-	return
+    fmt.Println("Erreur :", err)
+    return
 }
-
-err = os.WriteFile("save.json", contenuJSON, 0644)
-if err != nil {
-	fmt.Println("Erreur de sauvegarde :", err)
-	return
 }
-		return
-	}
-	fmt.Printf("Bonjour %s !\n", nom)
-
-	if _, err := demarrerMot(); err != nil {
-		fmt.Fprintln(os.Stderr, "Erreur :", err)
-	}
-
