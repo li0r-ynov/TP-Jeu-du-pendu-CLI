@@ -1,16 +1,19 @@
 {
   "nom": "Michel",
-  "mot": "pendu",
+  "mot": "clavier",
   "lettres_jouées": [
+    "t",
+    "u",
     "i",
-    "p",
-    "o",
-    "e",
-    "n",
-    "r",
     "a",
-    "j",
-    "k"
+    "m",
+    "p",
+    "l",
+    "c",
+    "r",
+    "s",
+    "v",
+    "e"
   ],
-  "essaies_restants": 0
+  "essaies_restants": 1
 }

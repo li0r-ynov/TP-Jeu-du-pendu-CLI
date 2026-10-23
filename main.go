@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -10,33 +9,53 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 || os.Args[1] != "jouer" {
-		fmt.Println("Utilisation : go run . jouer")
+	if len(os.Args) < 2 {
+		fmt.Println("Utilisation : go run . jouer | go run . reprendre")
 		return
 	}
 
 	scanner := bufio.NewScanner(os.Stdin)
-	nom := demanderNom(scanner)
-	if nom == "" {
+
+	var partie Partie
+	switch os.Args[1] {
+	case "jouer":
+		nom := demanderNom(scanner)
+		if nom == "" {
+			return
+		}
+
+		partie = Partie{
+			Nom:             nom,
+			LettresJouees:   []string{},
+			EssaiesRestants: 6,
+		}
+		if err := partie.selectionnerMot(); err != nil {
+			fmt.Fprintln(os.Stderr, "Erreur :", err)
+			return
+		}
+		fmt.Printf("Bonjour %s !\n", nom)
+	case "reprendre":
+		var err error
+		partie, err = chargerPartie()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Erreur :", err)
+			return
+		}
+		fmt.Printf("Reprise de la partie de %s.\n", partie.Nom)
+	default:
+		fmt.Println("Utilisation : go run . jouer | go run . reprendre")
 		return
 	}
 
-	partie := Partie{
-		Nom:             nom,
-		LettresJouees:   []string{},
-		EssaiesRestants: 6,
-	}
-	if err := partie.selectionnerMot(); err != nil {
-		fmt.Fprintln(os.Stderr, "Erreur :", err)
-		return
-	}
-
-	fmt.Printf("Bonjour %s !\n", nom)
 	if err := sauvegarderPartie(partie); err != nil {
-		fmt.Println("Erreur de sauvegarde :", err)
+		fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
 		return
 	}
 
+	jouerPartie(scanner, &partie)
+}
+
+func jouerPartie(scanner *bufio.Scanner, partie *Partie) {
 	for partie.EssaiesRestants > 0 && !partie.motTrouve() {
 		fmt.Printf("\nMot à deviner : %s\n", partie.afficherMot())
 		fmt.Printf("Essais restants : %d\n", partie.EssaiesRestants)
@@ -50,6 +69,16 @@ func main() {
 		}
 
 		saisie := strings.TrimSpace(scanner.Text())
+		quitter, err := gererCommandeSauvegarde(*partie, saisie)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
+			return
+		}
+		if quitter {
+			fmt.Println("Partie sauvegardée. À bientôt !")
+			return
+		}
+
 		lettres := []rune(saisie)
 		if len(lettres) != 1 || !unicode.IsLetter(lettres[0]) {
 			fmt.Println("Veuillez entrer une seule lettre.")
@@ -76,7 +105,7 @@ func main() {
 			fmt.Println("Cette lettre n'est pas dans le mot.")
 		}
 
-		if err := sauvegarderPartie(partie); err != nil {
+		if err := sauvegarderPartie(*partie); err != nil {
 			fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
 			return
 		}
@@ -118,15 +147,4 @@ func (partie Partie) lettreDejaJouee(lettre rune) bool {
 		}
 	}
 	return false
-}
-
-func sauvegarderPartie(partie Partie) error {
-	contenuJSON, err := json.MarshalIndent(partie, "", "  ")
-	if err != nil {
-		return fmt.Errorf("impossible de convertir la partie en JSON : %w", err)
-	}
-	if err := os.WriteFile("save.json", contenuJSON, 0644); err != nil {
-		return fmt.Errorf("impossible d'enregistrer la partie : %w", err)
-	}
-	return nil
 }
