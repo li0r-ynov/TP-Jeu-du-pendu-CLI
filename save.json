@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "nom": "Michel",
   "mot": "clavier",
   "lettres_jouées": [
@@ -14,6 +15,18 @@
     "s",
     "v",
     "e"
+=======
+  "nom": "Hola",
+  "mot": "porte-monnaie",
+  "lettres_jouees": [
+    "z",
+    "s",
+    "f",
+    "h",
+    "b",
+    "n",
+    "c"
+>>>>>>> 7647d7b4b28c2c851fb1a39db68d5e2164f7f5d1
   ],
   "essaies_restants": 1
 }

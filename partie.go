@@ -1,30 +1,19 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"os"
-	"strings"
-)
+import "fmt"
 
 type Partie struct {
 	Nom             string   `json:"nom"`
 	MotSecret       string   `json:"mot"`
-	LettresJouees   []string `json:"lettres_jouées"`
+	LettresJouees   []string `json:"lettres_jouees"`
 	EssaiesRestants int      `json:"essaies_restants"`
 }
 
-func (g *Partie) selectionnerMot() error {
-	data, err := os.ReadFile("mot.txt")
+func (p *Partie) selectionnerMot() error {
+	mot, err := demarrerMot()
 	if err != nil {
-		return fmt.Errorf("impossible de lire mot.txt : %w", err)
+		return fmt.Errorf("sélection du mot : %w", err)
 	}
-
-	mots := strings.Fields(string(data))
-	if len(mots) == 0 {
-		return fmt.Errorf("mot.txt ne contient aucun mot")
-	}
-
-	g.MotSecret = mots[rand.Intn(len(mots))]
+	p.MotSecret = mot
 	return nil
 }

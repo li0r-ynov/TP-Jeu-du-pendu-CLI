@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"unicode"
 )
 
@@ -17,7 +18,7 @@ func demanderNom(scanner *bufio.Scanner) string {
 			return ""
 		}
 
-		nom := []rune(scanner.Text())
+		nom := []rune(strings.TrimSpace(scanner.Text()))
 		if len(nom) == 0 {
 			fmt.Println("Nom invalide, veuillez réessayer.")
 			continue
