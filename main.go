@@ -43,7 +43,11 @@ func main() {
 		if nom == "" {
 			return
 		}
-		partie = Partie{Nom: nom, LettresJouees: []string{}, EssaiesRestants: 6}
+		difficulte := demanderDifficulte(scanner)
+		if difficulte == "" {
+			return
+		}
+		partie = Partie{Nom: nom, Difficulte: difficulte, LettresJouees: []string{}, EssaiesRestants: 6}
 		if err := partie.selectionnerMot(); err != nil {
 			fmt.Fprintln(os.Stderr, "Erreur :", err)
 			return
@@ -59,6 +63,7 @@ func main() {
 }
 
 func jouer(scanner *bufio.Scanner, partie *Partie) error {
+	fmt.Printf("Difficulté : %s\n", partie.Difficulte)
 	partie.afficherPendu()
 	for partie.EssaiesRestants > 0 && !partie.motTrouve() {
 		fmt.Printf("\nMot à deviner : %s\nEssais restants : %d\nEntrez une lettre : ", partie.afficherMot(), partie.EssaiesRestants)

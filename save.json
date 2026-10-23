@@ -1,14 +1,10 @@
 {
   "nom": "Hola",
+  "difficulte": "difficile",
   "mot": "porte-monnaie",
   "lettres_jouees": [
-    "z",
-    "s",
-    "f",
-    "h",
-    "b",
-    "n",
-    "c"
+    "d",
+    "f"
   ],
-  "essaies_restants": 0
+  "essaies_restants": 4
 }
