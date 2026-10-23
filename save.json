@@ -1,32 +1,16 @@
 {
-<<<<<<< HEAD
-  "nom": "Michel",
-  "mot": "clavier",
-  "lettres_jouées": [
-    "t",
-    "u",
-    "i",
-    "a",
-    "m",
-    "p",
-    "l",
-    "c",
-    "r",
-    "s",
-    "v",
-    "e"
-=======
-  "nom": "Hola",
-  "mot": "porte-monnaie",
+  "nom": "Davy",
+  "mot": "éléphant",
   "lettres_jouees": [
-    "z",
-    "s",
+    "t",
+    "e",
+    "l",
+    "é",
+    "d",
     "f",
-    "h",
-    "b",
-    "n",
-    "c"
->>>>>>> 7647d7b4b28c2c851fb1a39db68d5e2164f7f5d1
+    "z",
+    "x",
+    "s"
   ],
-  "essaies_restants": 1
+  "essaies_restants": 0
 }

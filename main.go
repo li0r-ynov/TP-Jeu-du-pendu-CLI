@@ -9,74 +9,23 @@ import (
 )
 
 func main() {
-<<<<<<< HEAD
-	if len(os.Args) < 2 {
-		fmt.Println("Utilisation : go run . jouer | go run . reprendre")
-=======
-	if len(os.Args) == 2 && os.Args[1] == "historique" {
+	if len(os.Args) != 2 {
+		afficherUtilisation()
+		return
+	}
+
+	if os.Args[1] == "historique" {
 		if err := afficherHistorique(); err != nil {
 			fmt.Fprintln(os.Stderr, "Impossible de lire l'historique :", err)
 		}
 		return
 	}
-	if len(os.Args) != 2 || (os.Args[1] != "jouer" && os.Args[1] != "reprendre") {
-		fmt.Println("Utilisation : go run . jouer | reprendre | historique")
->>>>>>> 7647d7b4b28c2c851fb1a39db68d5e2164f7f5d1
+	if os.Args[1] != "jouer" && os.Args[1] != "reprendre" {
+		afficherUtilisation()
 		return
 	}
 
 	scanner := bufio.NewScanner(os.Stdin)
-<<<<<<< HEAD
-
-	var partie Partie
-	switch os.Args[1] {
-	case "jouer":
-		nom := demanderNom(scanner)
-		if nom == "" {
-			return
-		}
-
-		partie = Partie{
-			Nom:             nom,
-			LettresJouees:   []string{},
-			EssaiesRestants: 6,
-		}
-		if err := partie.selectionnerMot(); err != nil {
-			fmt.Fprintln(os.Stderr, "Erreur :", err)
-			return
-		}
-		fmt.Printf("Bonjour %s !\n", nom)
-	case "reprendre":
-		var err error
-		partie, err = chargerPartie()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Erreur :", err)
-			return
-		}
-		fmt.Printf("Reprise de la partie de %s.\n", partie.Nom)
-	default:
-		fmt.Println("Utilisation : go run . jouer | go run . reprendre")
-		return
-	}
-
-	if err := sauvegarderPartie(partie); err != nil {
-		fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
-		return
-	}
-
-	jouerPartie(scanner, &partie)
-}
-
-func jouerPartie(scanner *bufio.Scanner, partie *Partie) {
-	for partie.EssaiesRestants > 0 && !partie.motTrouve() {
-		fmt.Printf("\nMot à deviner : %s\n", partie.afficherMot())
-		fmt.Printf("Essais restants : %d\n", partie.EssaiesRestants)
-		fmt.Print("Entrez une lettre : ")
-
-		if !scanner.Scan() {
-			if err := scanner.Err(); err != nil {
-				fmt.Fprintln(os.Stderr, "Erreur lors de la lecture de la lettre :", err)
-=======
 	var partie Partie
 	if os.Args[1] == "reprendre" {
 		var err error
@@ -90,7 +39,6 @@ func jouerPartie(scanner *bufio.Scanner, partie *Partie) {
 				fmt.Printf("Cette partie est terminée. Le mot était : %s\n", partie.MotSecret)
 			} else {
 				fmt.Printf("Cette partie est déjà gagnée : %s\n", partie.MotSecret)
->>>>>>> 7647d7b4b28c2c851fb1a39db68d5e2164f7f5d1
 			}
 			return
 		}
@@ -100,12 +48,18 @@ func jouerPartie(scanner *bufio.Scanner, partie *Partie) {
 		if nom == "" {
 			return
 		}
-		partie = Partie{Nom: nom, LettresJouees: []string{}, EssaiesRestants: 6}
+		partie = Partie{
+			Nom:             nom,
+			LettresJouees:   []string{},
+			EssaiesRestants: 6,
+		}
 		if err := partie.selectionnerMot(); err != nil {
 			fmt.Fprintln(os.Stderr, "Erreur :", err)
 			return
 		}
+		fmt.Printf("Bonjour %s !\n", nom)
 	}
+
 	if err := sauvegarderPartie(partie); err != nil {
 		fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
 		return
@@ -115,24 +69,16 @@ func jouerPartie(scanner *bufio.Scanner, partie *Partie) {
 	}
 }
 
-<<<<<<< HEAD
-		saisie := strings.TrimSpace(scanner.Text())
-		quitter, err := gererCommandeSauvegarde(*partie, saisie)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
-			return
-		}
-		if quitter {
-			fmt.Println("Partie sauvegardée. À bientôt !")
-			return
-		}
+func afficherUtilisation() {
+	fmt.Println("Utilisation : go run . jouer | go run . reprendre | go run . historique")
+}
 
-		lettres := []rune(saisie)
-=======
 func jouer(scanner *bufio.Scanner, partie *Partie) error {
 	partie.afficherPendu()
 	for partie.EssaiesRestants > 0 && !partie.motTrouve() {
-		fmt.Printf("\nMot à deviner : %s\nEssais restants : %d\nEntrez une lettre : ", partie.afficherMot(), partie.EssaiesRestants)
+		fmt.Printf("\nMot à deviner : %s\nEssais restants : %d\nEntrez une lettre (!save pour sauvegarder et quitter) : ",
+			partie.afficherMot(), partie.EssaiesRestants)
+
 		if !scanner.Scan() {
 			if err := scanner.Err(); err != nil {
 				return fmt.Errorf("lecture de la lettre : %w", err)
@@ -140,8 +86,18 @@ func jouer(scanner *bufio.Scanner, partie *Partie) error {
 			fmt.Println("\nPartie interrompue et sauvegardée. Relancez avec `go run . reprendre`.")
 			return sauvegarderPartie(*partie)
 		}
-		lettres := []rune(strings.TrimSpace(scanner.Text()))
->>>>>>> 7647d7b4b28c2c851fb1a39db68d5e2164f7f5d1
+
+		saisie := strings.TrimSpace(scanner.Text())
+		quitter, err := gererCommandeSauvegarde(*partie, saisie)
+		if err != nil {
+			return err
+		}
+		if quitter {
+			fmt.Println("Partie sauvegardée. À bientôt !")
+			return nil
+		}
+
+		lettres := []rune(saisie)
 		if len(lettres) != 1 || !unicode.IsLetter(lettres[0]) {
 			fmt.Println("Veuillez entrer une seule lettre.")
 			continue
@@ -151,28 +107,23 @@ func jouer(scanner *bufio.Scanner, partie *Partie) error {
 			fmt.Println("Vous avez déjà proposé cette lettre.")
 			continue
 		}
+
 		partie.LettresJouees = append(partie.LettresJouees, string(lettre))
-		present := false
-		for _, r := range partie.MotSecret {
-			if unicode.ToLower(r) == lettre {
-				present = true
+		presente := false
+		for _, lettreMot := range partie.MotSecret {
+			if unicode.ToLower(lettreMot) == lettre {
+				presente = true
 				break
 			}
 		}
-		if !present {
+		if !presente {
 			partie.EssaiesRestants--
 			fmt.Println("Cette lettre n'est pas dans le mot.")
 			partie.afficherPendu()
 		}
-<<<<<<< HEAD
 
 		if err := sauvegarderPartie(*partie); err != nil {
-			fmt.Fprintln(os.Stderr, "Erreur de sauvegarde :", err)
-			return
-=======
-		if err := sauvegarderPartie(*partie); err != nil {
 			return err
->>>>>>> 7647d7b4b28c2c851fb1a39db68d5e2164f7f5d1
 		}
 	}
 
