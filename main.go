@@ -54,11 +54,6 @@ func main() {
 			return
 		}
 		partie = Partie{Nom: nom, Difficulte: difficulte, LettresJouees: []string{}, EssaiesRestants: 6}
-		partie = Partie{
-			Nom:             nom,
-			LettresJouees:   []string{},
-			EssaiesRestants: 6,
-		}
 		if err := partie.selectionnerMot(); err != nil {
 			fmt.Fprintln(os.Stderr, "Erreur :", err)
 			return

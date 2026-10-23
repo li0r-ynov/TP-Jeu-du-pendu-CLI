@@ -49,7 +49,6 @@ func chargerPartie() (Partie, error) {
 		LettresJouees       []string `json:"lettres_jouees"`
 		LettresJoueesAccent []string `json:"lettres_jouées"`
 		EssaisRestants      *int     `json:"essais_restants"`
-		EssaiesRestants     *int     `json:"essaies_restants"`
 	}
 	if err := json.Unmarshal(contenu, &ancienne); err != nil {
 		return Partie{}, fmt.Errorf("sauvegarde JSON invalide : %w", err)
@@ -71,8 +70,6 @@ func chargerPartie() (Partie, error) {
 	}
 	if ancienne.EssaisRestants != nil {
 		partie.EssaiesRestants = *ancienne.EssaisRestants
-	} else if ancienne.EssaiesRestants != nil {
-		partie.EssaiesRestants = *ancienne.EssaiesRestants
 	}
 
 	if strings.TrimSpace(partie.Nom) == "" || !WordIsValid(partie.MotSecret) {
@@ -89,6 +86,12 @@ func chargerPartie() (Partie, error) {
 		if len(runes) != 1 || !unicode.IsLetter(runes[0]) {
 			return Partie{}, fmt.Errorf("lettre invalide dans %s", fichierSauvegarde)
 		}
+	}
+	if partie.Difficulte == "" {
+		partie.Difficulte = difficulteMot(partie.MotSecret)
+	}
+	if partie.Difficulte != "facile" && partie.Difficulte != "difficile" {
+		return Partie{}, fmt.Errorf("difficulté invalide dans %s", fichierSauvegarde)
 	}
 	return partie, nil
 }
