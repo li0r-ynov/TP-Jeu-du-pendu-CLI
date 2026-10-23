@@ -48,19 +48,17 @@ func main() {
 		if nom == "" {
 			return
 		}
-<<<<<<< HEAD
+
 		difficulte := demanderDifficulte(scanner)
 		if difficulte == "" {
 			return
 		}
 		partie = Partie{Nom: nom, Difficulte: difficulte, LettresJouees: []string{}, EssaiesRestants: 6}
-=======
 		partie = Partie{
 			Nom:             nom,
 			LettresJouees:   []string{},
 			EssaiesRestants: 6,
 		}
->>>>>>> 72f83954ac97a416f6441142103cf554623275bf
 		if err := partie.selectionnerMot(); err != nil {
 			fmt.Fprintln(os.Stderr, "Erreur :", err)
 			return

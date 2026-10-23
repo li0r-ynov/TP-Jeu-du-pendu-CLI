@@ -65,7 +65,6 @@ func chargerPartie() (Partie, error) {
 			return Partie{}, fmt.Errorf("lettre invalide dans save.json")
 		}
 	}
-	// Les anciennes sauvegardes ne contiennent pas encore la difficulté.
 	if partie.Difficulte == "" {
 		partie.Difficulte = difficulteMot(partie.MotSecret)
 	}
