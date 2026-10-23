@@ -1,16 +1,14 @@
 {
-  "nom": "Lior",
-  "mot": "fichier",
+  "nom": "Hola",
+  "mot": "porte-monnaie",
   "lettres_jouees": [
-    "i",
+    "z",
+    "s",
     "f",
     "h",
-    "o",
-    "u",
-    "y",
-    "e",
-    "r",
+    "b",
+    "n",
     "c"
   ],
-  "essaies_restants": 3
+  "essaies_restants": 0
 }

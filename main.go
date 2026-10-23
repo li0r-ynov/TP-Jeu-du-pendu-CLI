@@ -59,6 +59,7 @@ func main() {
 }
 
 func jouer(scanner *bufio.Scanner, partie *Partie) error {
+	partie.afficherPendu()
 	for partie.EssaiesRestants > 0 && !partie.motTrouve() {
 		fmt.Printf("\nMot à deviner : %s\nEssais restants : %d\nEntrez une lettre : ", partie.afficherMot(), partie.EssaiesRestants)
 		if !scanner.Scan() {
@@ -89,6 +90,7 @@ func jouer(scanner *bufio.Scanner, partie *Partie) error {
 		if !present {
 			partie.EssaiesRestants--
 			fmt.Println("Cette lettre n'est pas dans le mot.")
+			partie.afficherPendu()
 		}
 		if err := sauvegarderPartie(*partie); err != nil {
 			return err
