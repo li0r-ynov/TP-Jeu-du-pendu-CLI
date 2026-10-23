@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-// Le dessin gagne une partie du corps pour chaque essai perdu.
 func (partie Partie) afficherPendu() {
 	dessins := [...]string{
 		` +---+
