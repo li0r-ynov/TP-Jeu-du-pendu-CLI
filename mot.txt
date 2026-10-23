@@ -3,6 +3,4 @@ clavier
 ordinateur
 porte-monnaie
 fichier
-b0njour
-éléphant 
-
+éléphant

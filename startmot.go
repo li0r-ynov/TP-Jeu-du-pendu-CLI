@@ -19,8 +19,8 @@ func demarrerMot() (string, error) {
 	var mots []string
 	scanner := bufio.NewScanner(fichier)
 	for scanner.Scan() {
-		mot := strings.TrimSpace(scanner.Text())
-		if mot != "" {
+		mot := strings.ToLower(strings.TrimSpace(scanner.Text()))
+		if WordIsValid(mot) {
 			mots = append(mots, mot)
 		}
 	}
@@ -28,31 +28,19 @@ func demarrerMot() (string, error) {
 		return "", fmt.Errorf("impossible de lire mot.txt : %w", err)
 	}
 	if len(mots) == 0 {
-		return "", fmt.Errorf("mot.txt ne contient aucun mot")
+		return "", fmt.Errorf("mot.txt ne contient aucun mot valide")
 	}
+	return mots[rand.Intn(len(mots))], nil
+}
 
-	mot := mots[rand.Intn(len(mots))]
-	lettres := []rune(mot)
-	var positions []int
-	for i, lettre := range lettres {
-		if unicode.IsLetter(lettre) {
-			positions = append(positions, i)
+func WordIsValid(word string) bool {
+	if word == "" || strings.HasPrefix(word, "-") || strings.HasSuffix(word, "-") || strings.Contains(word, "--") {
+		return false
+	}
+	for _, letter := range word {
+		if !unicode.IsLetter(letter) && letter != '-' {
+			return false
 		}
 	}
-	if len(positions) == 0 {
-		return "", fmt.Errorf("le mot choisi ne contient aucune lettre")
-	}
-
-	lettreRevelee := unicode.ToLower(lettres[positions[rand.Intn(len(positions))]])
-	masque := make([]string, len(lettres))
-	for i, lettre := range lettres {
-		if !unicode.IsLetter(lettre) || unicode.ToLower(lettre) == lettreRevelee {
-			masque[i] = string(lettre)
-		} else {
-			masque[i] = "_"
-		}
-	}
-
-	fmt.Printf("Mot à deviner : %s\n", strings.Join(masque, " "))
-	return mot, nil
+	return true
 }
