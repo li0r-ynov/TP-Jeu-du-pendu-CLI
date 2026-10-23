@@ -1,16 +1,16 @@
 {
   "nom": "Lior",
-  "mot": "fichier",
+  "mot": "éléphant",
   "lettres_jouees": [
-    "i",
+    "n",
     "f",
+    "s",
     "h",
-    "o",
-    "u",
+    "j",
+    "t",
     "y",
-    "e",
-    "r",
-    "c"
+    "u",
+    "i"
   ],
-  "essaies_restants": 3
+  "essaies_restants": 0
 }
