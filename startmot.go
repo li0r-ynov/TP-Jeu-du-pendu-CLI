@@ -9,7 +9,10 @@ import (
 	"unicode"
 )
 
-func demarrerMot() (string, error) {
+func demarrerMot(difficulte string) (string, error) {
+	if difficulte != "facile" && difficulte != "difficile" {
+		return "", fmt.Errorf("difficulté invalide : %s", difficulte)
+	}
 	fichier, err := os.Open("mot.txt")
 	if err != nil {
 		return "", fmt.Errorf("impossible d'ouvrir mot.txt : %w", err)
@@ -20,7 +23,7 @@ func demarrerMot() (string, error) {
 	scanner := bufio.NewScanner(fichier)
 	for scanner.Scan() {
 		mot := strings.ToLower(strings.TrimSpace(scanner.Text()))
-		if WordIsValid(mot) {
+		if WordIsValid(mot) && difficulteMot(mot) == difficulte {
 			mots = append(mots, mot)
 		}
 	}
@@ -28,7 +31,7 @@ func demarrerMot() (string, error) {
 		return "", fmt.Errorf("impossible de lire mot.txt : %w", err)
 	}
 	if len(mots) == 0 {
-		return "", fmt.Errorf("mot.txt ne contient aucun mot valide")
+		return "", fmt.Errorf("mot.txt ne contient aucun mot valide pour la difficulté %s", difficulte)
 	}
 	return mots[rand.Intn(len(mots))], nil
 }
