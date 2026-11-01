@@ -1,9 +1,18 @@
 {
-  "nom": "Hola",
-  "difficulte": "facile",
-  "mot": "pendu",
+  "nom": "Ez",
+  "difficulte": "difficile",
+  "mot": "ordinateur",
   "lettres_jouees": [
-    "r"
+    "d",
+    "z",
+    "t",
+    "e",
+    "g",
+    "s",
+    "a",
+    "b",
+    "h",
+    "j"
   ],
-  "essaies_restants": 5
+  "essaies_restants": 0
 }
